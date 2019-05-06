@@ -1,0 +1,30 @@
+{
+  "name": "convbot",
+  "version": "0.0.1",
+  "description": "conversational bot built with typescript",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "check": "gts check",
+    "clean": "gts clean",
+    "compile": "tsc -p .",
+    "fix": "gts fix",
+    "prepare": "npm run compile",
+    "pretest": "npm run compile",
+    "posttest": "npm run check"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/panaC/convbot.git"
+  },
+  "author": "pierre leroux",
+  "license": "BSD-3-Clause",
+  "bugs": {
+    "url": "https://github.com/panaC/convbot/issues"
+  },
+  "homepage": "https://github.com/panaC/convbot#readme",
+  "devDependencies": {
+    "gts": "^1.0.0",
+    "typescript": "~3.4.0"
+  }
+}

@@ -1,15 +1,24 @@
-import { Istorage } from './storage';
 
 export interface Iid {
   session?: string;
   user?: string;
 }
 
-export interface Ibot<Tstorage = {}, Tnlp = {}, Tmiddleware = {}, Tconv = {}> {
-  utterance: string;
+export interface Ibot<Tconv = {}, Tdata = {}> {
+  /**
+   * conv is compulsory and needeed to pass into all chain of middleware
+   */
+  conv: Tconv;
+  // utterance: string;
+  /*
+  // all this will be inside middleware
   id: Iid;
   storage: Tstorage;
   nlp?: Tnlp;
-  middleware?: Tmiddleware;
-  conv?: Tconv;
+  graph: Tgraph;
+  */
+  /**
+   * middleware data
+   */
+  data?: Tdata;
 }

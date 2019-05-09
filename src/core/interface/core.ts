@@ -11,7 +11,7 @@ export interface Icore<Tname extends string, Tcontext extends string, Tconv> {
   context: Tcontext;
   node: {
     return: boolean;
-    type: EnodeType;
-    fct: (bot: Ibot<Tconv, IcoreData<Tname, Tconv>>) => Tname;
+    type?: EnodeType;
+    fct: (bot: Ibot<Tconv, IcoreData<Tname, Tcontext, Tconv>>) => Tname;
   };
 }

@@ -7,7 +7,6 @@ export type Tgraph<Tname extends string, Tcontext extends string, Tconv> = { [n 
 
 export const coreFactory =
   <Tname extends string, Tcontext extends string, Tconv>(graph: Tgraph<Tname, Tcontext, Tconv>) => 
-  // saved graph into core exec fct
 
   (bot: Ibot<Tconv, IcoreData<Tname, Tcontext, Tconv>>) => {
     /**

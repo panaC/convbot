@@ -40,8 +40,6 @@ export function exec<Tname extends string, Tcontext extends string, Tconv>(graph
       throw new Error(`no node typed with 'error' found in ${bot.data.context} context`);
     }
   }
-  //1/ looking for nodeName into graph
-  // if node return ?
   const node = getObjWithKey<Tgraph<Tname, Tcontext, Tconv>, Icore<Tname, Tcontext, Tconv>>(graph, bot.data.nodeName);
   if (node) {
     if (node.node.return) {

@@ -4,7 +4,7 @@ export interface Iid {
   user?: string;
 }
 
-export interface Ibot<Tconv = {}, Tdata = {}> {
+export interface Ibot<Tconv, Tdata> {
   /**
    * conv is compulsory and needeed to pass into all chain of middleware
    */
@@ -20,5 +20,5 @@ export interface Ibot<Tconv = {}, Tdata = {}> {
   /**
    * middleware data
    */
-  data?: Tdata;
+  data: Tdata;
 }

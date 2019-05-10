@@ -1,3 +1,3 @@
 
-export { managerFactory } from './manager';
-export { Ibot } from './interface/bot';
+export { managerFactory } from './manager/manager';
+export { Ibot } from './manager/interface/bot';

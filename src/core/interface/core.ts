@@ -1,5 +1,5 @@
 import { IcoreData } from './data';
-import { Ibot } from '../../interface/bot';
+import { Ibot } from '../../manager/interface/bot';
 
 export enum EnodeType {
   fallback,

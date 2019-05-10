@@ -5,7 +5,7 @@ export interface Inlp<Tname extends string, Tcontext extends string, Tconv> {
   context: Tcontext;
   nlp?: {
     nlu: {
-      [n in Tlanguage]: string[];
+      [n in Tlanguage]?: string[];
     };
   };
 }

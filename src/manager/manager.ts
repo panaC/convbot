@@ -4,10 +4,10 @@ export const managerFactory = <Tconv, Tdata>
   (...fct: Array<(bot: Ibot<Tconv, Tdata>) =>
     Ibot<Tconv, Tdata> | Promise<Ibot<Tconv, Tdata>>>) =>
 
-  async (conv: Tconv, initData?: (conv: Tconv) => Tdata) => {
+  async (conv: Tconv, initData: (conv: Tconv) => Tdata) => {
     const bot: Ibot<Tconv, Tdata> = {
       conv,
-      data: initData ? initData(conv) : undefined,
+      data: initData(conv),
     };
     const start = fct.shift();
     if (start) {

@@ -1,4 +1,4 @@
-import { Ibot } from './../interface/bot';
+import { Ibot } from '../manager/interface/bot';
 import { Icore, EnodeType } from './interface/core';
 import { Tgraph } from './factory';
 import { IcoreData } from './interface/data';

@@ -1,5 +1,5 @@
 import { IcoreData } from './interface/data';
-import { Ibot } from './../interface/bot';
+import { Ibot } from '../manager/interface/bot';
 import { Icore } from './interface/core';
 import { exec } from './exec';
 

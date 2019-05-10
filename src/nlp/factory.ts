@@ -1,5 +1,5 @@
 import { InlpData } from './interface/data';
-import { Ibot } from './../interface/bot';
+import { Ibot } from '../manager/interface/bot';
 import { Inlp } from './interface/nlp';
 import { NluManager } from 'node-nlp';
 
@@ -22,8 +22,10 @@ export const nlpFactory =
       if (nlp) {
         Object.entries(nlp.nlu).map(nlu => {
           const [lang, utterance] = nlu;
-          classifier.assignDomain(lang, name, context);
-          utterance.map(ut => classifier.addDocument(lang, ut, name));
+          if (utterance) {
+            classifier.assignDomain(lang, name, context);
+            utterance.map(ut => classifier.addDocument(lang, ut, name));
+          }
         });
       }
     });

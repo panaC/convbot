@@ -4,7 +4,7 @@ import { InlpData } from './../../nlp/interface/data';
 import { IcoreData } from './../../core/interface/data';
 import { managerFactory } from './../../manager/manager';
 import { Inlp } from './../../nlp/interface/nlp';
-import { Icore } from './../../core/interface/core';
+import { Icore, EnodeType } from './../../core/interface/core';
 import { Tgraph2 } from './../../manager/type/graph';
 
 type Tname = 'start' |
@@ -54,6 +54,7 @@ const graph: Tgraph2<Tname, Icore<Tname, Tcontext, Iconv>, Inlp<Tname, Tcontext,
     context: 'default',
     node: {
       return: true,
+      type: EnodeType.fallback,
       fct: (bot) => {
         bot.conv.output = 'Je n\'ai pas compris';
         return 'fallback';
@@ -64,6 +65,7 @@ const graph: Tgraph2<Tname, Icore<Tname, Tcontext, Iconv>, Inlp<Tname, Tcontext,
     context: 'default',
     node: {
       return: true,
+      type: EnodeType.error,
       fct: (bot) => {
         bot.conv.output = 'Une érreur est survenue';
         return 'error';
@@ -88,17 +90,39 @@ interface Idata extends
   );
 
   const conv: Iconv = {
-    input: 'bonjour',
+    input: 'bon',
     output: '',
   };
 
-  await compute(conv, (conv) => ({
+  await compute(conv, () => ({
     utterance: '',
     nodeName: 'hello',
     context: 'default',
   }));
 
   console.log(conv);
-  
+
+  /**
+   * Mode intent name
+   * without nlp
+   * used in Actions for example to handle 'Welcome' or 'mediaStatus' event
+   */
+
+  const compute2 = managerFactory<Iconv, Idata>(
+    coreFactory<Tname, Tcontext, Iconv, Idata>(graph)
+  );
+
+  const conv2: Iconv = {
+    input: '',
+    output: '',
+  };
+
+  await compute2(conv2, () => ({
+    utterance: '',
+    nodeName: 'start',
+    context: 'default',
+  }));
+
+  console.log(conv2);
+
 })();
- 

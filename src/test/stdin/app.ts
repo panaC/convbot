@@ -72,14 +72,19 @@ const graph: Tgraph2<Tname, Icore<Tname, Tcontext, Iconv>, Inlp<Tname, Tcontext,
   },
 };
 
+interface Idata extends
+  IcoreData<Tname, Tcontext, Iconv>,
+  InlpData<Tname, Tcontext, Iconv> {
+}
+
 ( async () => {
-  const compute = managerFactory<Iconv, IcoreData<Tname, Tcontext, Iconv> & InlpData<Tname, Tcontext, Iconv>>(
+  const compute = managerFactory<Iconv, Idata>(
     (bot) => {
       bot.data.utterance = bot.conv.input;
       return bot;
     },
-    coreFactory<Tname, Tcontext, Iconv>(graph),
-    await nlpFactory<Tname, Tcontext, Iconv>(graph)
+    await nlpFactory<Tname, Tcontext, Iconv, Idata>(graph),
+    coreFactory<Tname, Tcontext, Iconv, Idata>(graph)
   );
 })();
  

@@ -6,7 +6,7 @@ import { NluManager } from 'node-nlp';
 export type Tgraph<Tname extends string, Tcontext extends string, Tconv> = { [n in Tname]?: Inlp<Tname, Tcontext, Tconv>};
 
 export const nlpFactory =
-  async <Tname extends string, Tcontext extends string, Tconv>(graph: Tgraph<Tname, Tcontext, Tconv>) => {
+  async <Tname extends string, Tcontext extends string, Tconv, Tdata extends InlpData<Tname, Tcontext, Tconv>>(graph: Tgraph<Tname, Tcontext, Tconv>) => {
 
     const classifier = new NluManager({
       languages: Object.entries<Inlp<Tname, Tcontext, Tconv>>(graph as { [s: string]: Inlp<Tname, Tcontext, Tconv> })
@@ -31,7 +31,7 @@ export const nlpFactory =
     });
     await classifier.train();
 
-    return ((bot: Ibot<Tconv, InlpData<Tname, Tcontext, Tconv>>): Ibot<Tconv, InlpData<Tname, Tcontext, Tconv>> => {
+    return ((bot: Ibot<Tconv, Tdata>): Ibot<Tconv, Tdata> => {
       const c = classifier.getClassifications(bot.data.utterance);
       bot.data.nodeName = c.intent;
       bot.data.context = c.domain; // be warn here // if intent found is None, they will be no context defined here // It need to have memory that set context before

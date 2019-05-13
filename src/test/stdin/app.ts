@@ -86,5 +86,19 @@ interface Idata extends
     await nlpFactory<Tname, Tcontext, Iconv, Idata>(graph),
     coreFactory<Tname, Tcontext, Iconv, Idata>(graph)
   );
+
+  const conv: Iconv = {
+    input: 'bonjour',
+    output: '',
+  };
+
+  await compute(conv, (conv) => ({
+    utterance: '',
+    nodeName: 'hello',
+    context: 'default',
+  }));
+
+  console.log(conv);
+  
 })();
  

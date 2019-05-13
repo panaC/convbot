@@ -4,11 +4,13 @@
     "rootDir": ".",
     "outDir": "build",
     "lib": [
-      "es2018"
+      "es2018",
+      "dom"
     ]
   },
   "include": [
     "src/**/*.ts",
+    "@types/**/*.d.ts",
     "test/**/*.ts"
   ]
 }

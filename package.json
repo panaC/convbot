@@ -3,6 +3,7 @@
   "version": "0.0.1",
   "description": "conversational bot built with typescript",
   "main": "build/index.js",
+  "types": "build/index.d.ts",
   "scripts": {
     "test": "jest --rootDir build/ --verbose",
     "check": "gts check",

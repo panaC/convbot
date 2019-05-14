@@ -5,5 +5,5 @@ export interface InlpData<
 > {
   utterance: string;
   nodeName: Tname;
-  context: Tcontext;
+  domain: Tcontext | 'None';
 }

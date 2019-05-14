@@ -53,7 +53,7 @@ export const nlpFactory = async <
   return (bot: Ibot<Tconv, Tdata>): Ibot<Tconv, Tdata> => {
     const c = classifier.getClassifications(bot.data.utterance);
     bot.data.nodeName = c.intent;
-    bot.data.context = c.domain; // be warn here // if intent found is None, they will be no context defined here // It need to have memory that set context before
+    bot.data.domain = c.domain;
     return bot;
   };
 };

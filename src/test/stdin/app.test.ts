@@ -12,7 +12,8 @@ type Tname =
   | 'name'
   | 'fallback'
   | 'error'
-  | 'whoIam'
+  | 'personality_whoIam'
+  | 'personality_error'
   | 'hello'
   | 'bye';
 
@@ -49,7 +50,48 @@ const graph: Tgraph2<
     },
     nlp: {
       nlu: {
-        fr: ['bonjour', 'salut'],
+        en: ['Hello', 'Hi'],
+      },
+    },
+  },
+  bye: {
+    context: 'default',
+    node: {
+      return: true,
+      fct: bot => {
+        bot.conv.output += 'see you';
+        return 'bye';
+      },
+    },
+    nlp: {
+      nlu: {
+        en: ['Bye', 'goodbye'],
+      },
+    },
+  },
+  personality_whoIam: {
+    context: 'personality',
+    node: {
+      return: true,
+      fct: bot => {
+        bot.conv.output += 'I am convbot';
+        return 'personality_whoIam';
+      },
+    },
+    nlp: {
+      nlu: {
+        en: ['who i am'],
+      },
+    },
+  },
+  personality_error: {
+    context: 'personality',
+    node: {
+      return: true,
+      type: EnodeType.error,
+      fct: bot => {
+        bot.conv.output = 'An error was happened on personality context';
+        return 'personality_error';
       },
     },
   },
@@ -59,7 +101,7 @@ const graph: Tgraph2<
       return: true,
       type: EnodeType.fallback,
       fct: bot => {
-        bot.conv.output = "Je n'ai pas compris";
+        bot.conv.output = "I don't understand";
         return 'fallback';
       },
     },
@@ -70,7 +112,7 @@ const graph: Tgraph2<
       return: true,
       type: EnodeType.error,
       fct: bot => {
-        bot.conv.output = 'Une érreur est survenue';
+        bot.conv.output = 'An error was happened';
         return 'error';
       },
     },
@@ -88,11 +130,17 @@ test('hello world', async () => {
       return bot;
     },
     await nlpFactory<Tname, Tcontext, Iconv, Idata>(graph),
+    bot => {
+      if (bot.data.domain !== bot.data.context) {
+        bot.data.nodeName = `${bot.data.domain}_fallback` as Tname;
+      }
+      return bot;
+    },
     coreFactory<Tname, Tcontext, Iconv, Idata>(graph)
   );
 
   const conv: Iconv = {
-    input: 'bonjour',
+    input: 'hello',
     output: '',
   };
 
@@ -100,6 +148,7 @@ test('hello world', async () => {
     utterance: '',
     nodeName: 'hello',
     context: 'default',
+    domain: 'None',
   }));
 
   expect(conv.output).toBe('Hello world');
@@ -112,11 +161,17 @@ test('test fallback', async () => {
       return bot;
     },
     await nlpFactory<Tname, Tcontext, Iconv, Idata>(graph),
+    bot => {
+      if (bot.data.domain !== bot.data.context) {
+        bot.data.nodeName = `${bot.data.domain}_fallback` as Tname;
+      }
+      return bot;
+    },
     coreFactory<Tname, Tcontext, Iconv, Idata>(graph)
   );
 
   const conv: Iconv = {
-    input: 'bon',
+    input: 'hel',
     output: '',
   };
 
@@ -124,9 +179,10 @@ test('test fallback', async () => {
     utterance: '',
     nodeName: 'hello',
     context: 'default',
+    domain: 'None',
   }));
 
-  expect(conv.output).toBe("Je n'ai pas compris");
+  expect(conv.output).toBe("I don't understand");
 });
 
 /**
@@ -149,7 +205,101 @@ test('intent node without nlp', async () => {
     utterance: '',
     nodeName: 'start',
     context: 'default',
+    domain: 'None',
   }));
 
   expect(conv.output).toBe('[start]Hello world');
+});
+
+test("test 'bye' in personality context", async () => {
+  const compute = managerFactory<Iconv, Idata>(
+    bot => {
+      bot.data.utterance = bot.conv.input;
+      return bot;
+    },
+    await nlpFactory<Tname, Tcontext, Iconv, Idata>(graph),
+    bot => {
+      if (bot.data.domain !== bot.data.context) {
+        bot.data.nodeName = `${bot.data.domain}_fallback` as Tname;
+      }
+      return bot;
+    },
+    coreFactory<Tname, Tcontext, Iconv, Idata>(graph)
+  );
+
+  const conv: Iconv = {
+    input: 'bye',
+    output: '',
+  };
+
+  await compute(conv, () => ({
+    utterance: '',
+    nodeName: 'hello',
+    context: 'personality',
+    domain: 'None',
+  }));
+
+  expect(conv.output).toBe('An error was happened on personality context');
+});
+
+test("test 'who i am' in personality context", async () => {
+  const compute = managerFactory<Iconv, Idata>(
+    bot => {
+      bot.data.utterance = bot.conv.input;
+      return bot;
+    },
+    await nlpFactory<Tname, Tcontext, Iconv, Idata>(graph),
+    bot => {
+      if (bot.data.domain !== bot.data.context) {
+        bot.data.nodeName = `${bot.data.domain}_fallback` as Tname;
+      }
+      return bot;
+    },
+    coreFactory<Tname, Tcontext, Iconv, Idata>(graph)
+  );
+
+  const conv: Iconv = {
+    input: 'who i am ?',
+    output: '',
+  };
+
+  await compute(conv, () => ({
+    utterance: '',
+    nodeName: 'hello',
+    context: 'personality',
+    domain: 'None',
+  }));
+
+  expect(conv.output).toBe('I am convbot');
+});
+
+test("test 'who i am' in default context", async () => {
+  const compute = managerFactory<Iconv, Idata>(
+    bot => {
+      bot.data.utterance = bot.conv.input;
+      return bot;
+    },
+    await nlpFactory<Tname, Tcontext, Iconv, Idata>(graph),
+    bot => {
+      if (bot.data.domain !== bot.data.context) {
+        bot.data.nodeName = `${bot.data.domain}_fallback` as Tname;
+      }
+      return bot;
+    },
+    coreFactory<Tname, Tcontext, Iconv, Idata>(graph)
+  );
+
+  const conv: Iconv = {
+    input: 'who i am ?',
+    output: '',
+  };
+
+  await compute(conv, () => ({
+    utterance: '',
+    nodeName: 'hello',
+    context: 'default',
+    domain: 'None',
+  }));
+
+  expect(conv.output).toBe("I don't understand");
 });
